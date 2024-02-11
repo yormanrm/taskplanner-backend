@@ -64,12 +64,48 @@ public class TaskController {
         }
     }
 
-    @PostMapping("/byUser/byStatus/{status}")
-    public ResponseEntity<Iterable<Task>> findByStatus(@PathVariable Status status, HttpServletRequest request) {
+    @GetMapping("/byUser/byStatus")
+    public ResponseEntity<Iterable<Task>> findByStatus(@RequestParam String status, HttpServletRequest request) {
+        try {
+            Status statusValue = Status.valueOf(status);
+            Claims claims = JWTValid(request);
+            Integer userId = Integer.parseInt(claims.get("id").toString());
+            return new ResponseEntity<>(taskService.findByStatus(userId, statusValue), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/byUser/search")
+    public ResponseEntity<Iterable<Task>> findByNameOrDescription(@RequestParam String search, HttpServletRequest request) {
         try {
             Claims claims = JWTValid(request);
             Integer userId = Integer.parseInt(claims.get("id").toString());
-            return new ResponseEntity<>(taskService.findByStatus(status), HttpStatus.OK);
+            return new ResponseEntity<>(taskService.findByNameOrDescription(userId, search), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/updateTaskStatus")
+    public ResponseEntity updateStateById(@RequestParam Integer id, @RequestParam String status) {
+        try {
+            Status statusValue = Status.valueOf(status);
+            taskService.updateStatusById(id, statusValue);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Error {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/deleteTask")
+    public ResponseEntity<HttpStatus> deleteById(@RequestParam Integer id) {
+        try {
+            taskService.deleteById(id);
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             log.error("Error {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

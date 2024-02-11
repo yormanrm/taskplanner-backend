@@ -12,9 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ITaskCrudRepository extends CrudRepository<TaskEntity, Integer> {
     Iterable<TaskEntity> findByUserEntity(UserEntity userEntity);
 
-    Iterable<TaskEntity> findByStatus(Status status);
-
-//    Iterable<TaskEntity> findByNameOrDescription(String text);
+    Iterable<TaskEntity> findByUserEntityAndStatus(UserEntity userEntity, Status status);
 
     @Transactional
     @Modifying

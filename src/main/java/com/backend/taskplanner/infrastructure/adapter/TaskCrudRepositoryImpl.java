@@ -34,11 +34,6 @@ public class TaskCrudRepositoryImpl implements ITaskRepository {
     }
 
     @Override
-    public Iterable<Task> findAll() {
-        return taskMapper.toTasks((iTaskCrudRepository.findAll()));
-    }
-
-    @Override
     public Task findById(Integer id) {
         Optional<TaskEntity> taskEntityOptional = iTaskCrudRepository.findById(id);
         return taskEntityOptional.map(taskMapper::toTask).orElseGet(Task::new);
@@ -52,13 +47,17 @@ public class TaskCrudRepositoryImpl implements ITaskRepository {
     }
 
     @Override
-    public Iterable<Task> findByStatus(Status status) {
-        return taskMapper.toTasks(iTaskCrudRepository.findByStatus(status));
+    public Iterable<Task> findByStatus(Integer userId, Status status) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(userId);
+        return taskMapper.toTasks(iTaskCrudRepository.findByUserEntityAndStatus(userEntity, status));
     }
 
     @Override
-    public Iterable<Task> findByNameOrDescription(String text) {
-        Iterable<TaskEntity> allTasks = iTaskCrudRepository.findAll();
+    public Iterable<Task> findByNameOrDescription(Integer userId, String text) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(userId);
+        Iterable<TaskEntity> allTasks = iTaskCrudRepository.findByUserEntity(userEntity);
         if (text == null || text.isEmpty()) {
             return taskMapper.toTasks(allTasks);
         } else {

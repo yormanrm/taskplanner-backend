@@ -15,10 +15,6 @@ public class TaskService {
         return this.iTaskRepository.save(task);
     }
 
-    public Iterable<Task> findAll() {
-        return this.iTaskRepository.findAll();
-    }
-
     public Task findById(Integer id) {
         return this.iTaskRepository.findById(id);
     }
@@ -27,12 +23,12 @@ public class TaskService {
         return this.iTaskRepository.findByUserId(userId);
     }
 
-    public Iterable<Task> findByStatus(Status status) {
-        return this.iTaskRepository.findByStatus(status);
+    public Iterable<Task> findByStatus(Integer userId, Status status) {
+        return this.iTaskRepository.findByStatus(userId, status);
     }
 
-    public Iterable<Task> findByNameOrDescription(String text) {
-        return this.iTaskRepository.findByNameOrDescription(text);
+    public Iterable<Task> findByNameOrDescription(Integer userId, String text) {
+        return this.iTaskRepository.findByNameOrDescription(userId, text);
     }
 
     public void updateStatusById(Integer id, Status status) {
