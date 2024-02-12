@@ -1,5 +1,7 @@
 package com.backend.taskplanner.domain.model;
+
 import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +18,7 @@ public class Task {
     private LocalDateTime dateUpdated;
     private Integer userId;
 
-    public Task(){
+    public Task() {
         activities = new ArrayList<>();
     }
 
