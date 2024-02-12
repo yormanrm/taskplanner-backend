@@ -29,6 +29,6 @@ public class TaskEntity {
     private LocalDateTime dateUpdated;
     @ManyToOne
     private UserEntity userEntity;
-    @OneToMany(mappedBy = "taskEntity", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "taskEntity", cascade = CascadeType.ALL)
     private List<ActivityEntity> activities;
 }
