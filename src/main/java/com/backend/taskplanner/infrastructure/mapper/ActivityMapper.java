@@ -10,7 +10,7 @@ import org.mapstruct.Mappings;
 @Mapper(componentModel = "spring")
 public interface ActivityMapper {
 
-    @Mappings({@Mapping(source = "id", target = "id"), @Mapping(source = "description", target = "description"), @Mapping(source = "status", target = "status"), @Mapping(source = "dateCreated", target = "dateCreated"), @Mapping(source = "dateUpdated", target = "dateUpdated")})
+    @Mappings({@Mapping(source = "id", target = "id"), @Mapping(source = "description", target = "description"), @Mapping(source = "status", target = "status"), @Mapping(source = "dateCreated", target = "dateCreated"), @Mapping(source = "dateUpdated", target = "dateUpdated"), @Mapping(source = "taskEntity.id", target = "taskId")})
     Activity toActivity(ActivityEntity activityEntity);
 
     Iterable<Activity> toActivities(Iterable<ActivityEntity> activityEntities);

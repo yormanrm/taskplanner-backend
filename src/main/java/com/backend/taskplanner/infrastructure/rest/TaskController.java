@@ -24,7 +24,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @PostMapping("/saveTask")
+    @PostMapping("/save")
     public ResponseEntity<Task> save(@RequestBody Task task, HttpServletRequest request) {
         try {
             Claims claims = JWTValid(request);
@@ -37,8 +37,20 @@ public class TaskController {
         }
     }
 
-    @GetMapping("/byTaskId/{id}")
-    public ResponseEntity<Task> findById(@PathVariable Integer id) {
+    @GetMapping("/get/all")
+    public ResponseEntity<Iterable<Task>> findByUserId(HttpServletRequest request) {
+        try {
+            Claims claims = JWTValid(request);
+            Integer userId = Integer.parseInt(claims.get("id").toString());
+            return new ResponseEntity<>(taskService.findByUserId(userId), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/get/byId")
+    public ResponseEntity<Task> findById(@RequestParam Integer id) {
         try {
             Task task = taskService.findById(id);
             if (task.getId() != null) {
@@ -52,19 +64,7 @@ public class TaskController {
         }
     }
 
-    @GetMapping("/byUser")
-    public ResponseEntity<Iterable<Task>> findByUserId(HttpServletRequest request) {
-        try {
-            Claims claims = JWTValid(request);
-            Integer userId = Integer.parseInt(claims.get("id").toString());
-            return new ResponseEntity<>(taskService.findByUserId(userId), HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("Error {}", e.getMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/byUser/byStatus")
+    @GetMapping("/get/byStatus")
     public ResponseEntity<Iterable<Task>> findByStatus(@RequestParam String status, HttpServletRequest request) {
         try {
             Status statusValue = Status.valueOf(status);
@@ -77,7 +77,7 @@ public class TaskController {
         }
     }
 
-    @GetMapping("/byUser/search")
+    @GetMapping("/get/bySearch")
     public ResponseEntity<Iterable<Task>> findByNameOrDescription(@RequestParam String search, HttpServletRequest request) {
         try {
             Claims claims = JWTValid(request);
@@ -89,7 +89,7 @@ public class TaskController {
         }
     }
 
-    @PostMapping("/updateTaskStatus")
+    @PostMapping("/updateStatus")
     public ResponseEntity updateStateById(@RequestParam Integer id, @RequestParam String status) {
         try {
             Status statusValue = Status.valueOf(status);
@@ -101,7 +101,7 @@ public class TaskController {
         }
     }
 
-    @DeleteMapping("/deleteTask")
+    @DeleteMapping("/delete")
     public ResponseEntity<HttpStatus> deleteById(@RequestParam Integer id) {
         try {
             taskService.deleteById(id);

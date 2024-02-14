@@ -26,9 +26,7 @@ public class TaskCrudRepositoryImpl implements ITaskRepository {
     @Override
     public Task save(Task task) {
         TaskEntity taskEntity = taskMapper.toTaskEntity(task);
-        taskEntity.getActivities().forEach(
-                activityEntity -> activityEntity.setTaskEntity(taskEntity)
-        );
+        taskEntity.getActivities().forEach(activityEntity -> activityEntity.setTaskEntity(taskEntity));
         return taskMapper.toTask(iTaskCrudRepository.save(taskEntity));
     }
 

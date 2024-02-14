@@ -15,4 +15,5 @@ public class Activity {
     private Status status;
     private LocalDateTime dateCreated;
     private LocalDateTime dateUpdated;
+    private Integer taskId;
 }
