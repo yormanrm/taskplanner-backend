@@ -20,9 +20,4 @@ public class BeanConfiguration {
     public TaskService taskService(ITaskRepository iTaskRepository) {
         return new TaskService(iTaskRepository);
     }
-
-    @Bean
-    public ActivityService activityService(IActivityRepository iActivityRepository) {
-        return new ActivityService(iActivityRepository);
-    }
 }

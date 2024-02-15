@@ -17,16 +17,6 @@ public class ActivityCrudRepositoryImpl implements IActivityRepository {
     }
 
     @Override
-    public Activity save(Activity activity) {
-        return activityMapper.toActivity(iActivityCrudRepository.save(activityMapper.toActivityEntity(activity)));
-    }
-
-    @Override
-    public void updateStatusById(Integer id, Status status) {
-        iActivityCrudRepository.updateStatusById(id, status);
-    }
-
-    @Override
     public void deleteById(Integer id) {
         iActivityCrudRepository.findById(id).orElseThrow(() -> new RuntimeException("Activity not found"));
         iActivityCrudRepository.deleteById(id);

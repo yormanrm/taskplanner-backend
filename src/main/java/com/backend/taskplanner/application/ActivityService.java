@@ -11,14 +11,6 @@ public class ActivityService {
         this.iActivityRepository = iActivityRepository;
     }
 
-    public Activity save(Activity activity) {
-        return this.iActivityRepository.save(activity);
-    }
-
-    public void updateStatusById(Integer id, Status status) {
-        this.iActivityRepository.updateStatusById(id, status);
-    }
-
     public void deleteById(Integer id) {
         this.iActivityRepository.deleteById(id);
     }

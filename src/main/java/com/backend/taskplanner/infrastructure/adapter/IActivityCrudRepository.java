@@ -8,8 +8,4 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface IActivityCrudRepository extends CrudRepository<ActivityEntity, Integer> {
-    @Transactional
-    @Modifying
-    @Query("UPDATE ActivityEntity a SET a.status = :status WHERE a.id = :id")
-    void updateStatusById(Integer id, Status status);
 }
