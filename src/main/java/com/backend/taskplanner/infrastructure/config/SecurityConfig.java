@@ -1,6 +1,7 @@
 package com.backend.taskplanner.infrastructure.config;
 
 import com.backend.taskplanner.infrastructure.jwt.JWTAuthorizationFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,15 +29,22 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf(csrf -> csrf.disable()).authorizeHttpRequests(
-                aut -> aut.requestMatchers("/tasks/**").authenticated()
+        httpSecurity.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(aut -> aut.requestMatchers("/tasks/**").authenticated()
                         .requestMatchers("/activities/**").authenticated()
-                        .requestMatchers("/users/**").permitAll().anyRequest().authenticated()
-        ).addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+                        .requestMatchers("/users/**").permitAll()
+                        .anyRequest().authenticated())
+                .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling.authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Establece el código de estado como 401 Unauthorized
+                        })
+                );
         return httpSecurity.build();
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {return new BCryptPasswordEncoder();
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
