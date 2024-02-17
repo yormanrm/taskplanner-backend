@@ -29,11 +29,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(aut -> aut.requestMatchers("/tasks/**").authenticated()
-                        .requestMatchers("/activities/**").authenticated()
-                        .requestMatchers("/users/**").permitAll()
-                        .anyRequest().authenticated())
+        httpSecurity.csrf(csrf -> csrf.disable()).authorizeHttpRequests(
+                        aut -> aut.requestMatchers("/tasks/**").authenticated()
+                                .requestMatchers("/activities/**").authenticated()
+                                .requestMatchers("/users/**").permitAll().anyRequest().authenticated())
                 .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.authenticationEntryPoint((request, response, authException) -> {
