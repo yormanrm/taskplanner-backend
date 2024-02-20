@@ -89,6 +89,18 @@ public class TaskController {
         }
     }
 
+    @GetMapping("/get/byDatesRange")
+    public ResponseEntity<Iterable<Task>> findByDatesRange(HttpServletRequest request, @RequestParam String startDate, @RequestParam String endDate) {
+        try {
+            Claims claims = JWTValid(request);
+            Integer userId = Integer.parseInt(claims.get("id").toString());
+            return new ResponseEntity<>(taskService.findByDatesRange(userId, startDate, endDate), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/updateStatus")
     public ResponseEntity updateStateById(@RequestParam Integer id, @RequestParam String status) {
         try {

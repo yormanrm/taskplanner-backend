@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -98,6 +99,16 @@ public class TaskCrudRepositoryImpl implements ITaskRepository {
             }
             return taskMapper.toTasks(matchingTasks);
         }
+    }
+
+    @Override
+    public Iterable<Task> findByDatesRange(Integer userId, String startDate, String endDate) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(userId);
+        LocalDateTime startDateTime = LocalDateTime.parse(startDate + "T00:00:00");
+        LocalDateTime endDateTime = LocalDateTime.parse(endDate + "T23:59:59");
+        Iterable<TaskEntity> taskEntities = iTaskCrudRepository.findByDatesRange(userEntity, startDateTime, endDateTime);
+        return taskMapper.toTasks(taskEntities);
     }
 
     @Override

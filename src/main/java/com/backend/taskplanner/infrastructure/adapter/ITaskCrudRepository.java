@@ -8,11 +8,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 
 public interface ITaskCrudRepository extends CrudRepository<TaskEntity, Integer> {
     Iterable<TaskEntity> findByUserEntity(UserEntity userEntity);
 
     Iterable<TaskEntity> findByUserEntityAndStatus(UserEntity userEntity, Status status);
+
+    @Query("SELECT t FROM TaskEntity t WHERE t.dateCreated BETWEEN :startDate AND :endDate AND t.userEntity = :userEntity")
+    Iterable<TaskEntity> findByDatesRange(UserEntity userEntity, LocalDateTime startDate, LocalDateTime endDate);
 
     @Transactional
     @Modifying

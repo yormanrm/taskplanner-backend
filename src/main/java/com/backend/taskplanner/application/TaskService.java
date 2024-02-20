@@ -31,6 +31,10 @@ public class TaskService {
         return this.iTaskRepository.findByNameOrDescription(userId, text);
     }
 
+    public Iterable<Task> findByDatesRange(Integer userId, String startDate, String endDate){
+        return this.iTaskRepository.findByDatesRange(userId, startDate, endDate);
+    }
+
     public void updateStatusById(Integer id, Status status) {
         this.iTaskRepository.updateStatusById(id, status);
     }

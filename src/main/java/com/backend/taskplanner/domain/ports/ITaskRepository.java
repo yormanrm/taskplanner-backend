@@ -14,6 +14,8 @@ public interface ITaskRepository {
 
     Iterable<Task> findByNameOrDescription(Integer userId, String text);
 
+    Iterable<Task> findByDatesRange(Integer userId, String startDate, String endDate);
+
     void updateStatusById(Integer id, Status status);
 
     void deleteById(Integer id);
