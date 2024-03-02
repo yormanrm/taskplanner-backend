@@ -18,5 +18,7 @@ public interface ITaskRepository {
 
     void updateStatusById(Integer id, Status status);
 
+    void updateArchivedById(Integer id, Boolean archived);
+
     void deleteById(Integer id);
 }

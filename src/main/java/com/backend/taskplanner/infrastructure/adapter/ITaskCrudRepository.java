@@ -24,4 +24,8 @@ public interface ITaskCrudRepository extends CrudRepository<TaskEntity, Integer>
     @Query("UPDATE TaskEntity t SET t.status = :status WHERE t.id = :id")
     void updateStatusById(Integer id, Status status);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE TaskEntity t SET t.archived = :archived WHERE t.id = :id")
+    void updateArchivedById(Integer id, Boolean archived);
 }

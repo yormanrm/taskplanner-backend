@@ -93,7 +93,7 @@ public class TaskCrudRepositoryImpl implements ITaskRepository {
             for (TaskEntity taskEntity : allTasks) {
                 String lowerCaseName = taskEntity.getName().toLowerCase();
                 String lowerCaseDescription = taskEntity.getDescription().toLowerCase();
-                if (lowerCaseName.startsWith(searchtext) || lowerCaseDescription.startsWith(searchtext)) {
+                if (lowerCaseName.contains(searchtext) || lowerCaseDescription.contains(searchtext)) {
                     matchingTasks.add(taskEntity);
                 }
             }
@@ -114,6 +114,11 @@ public class TaskCrudRepositoryImpl implements ITaskRepository {
     @Override
     public void updateStatusById(Integer id, Status status) {
         iTaskCrudRepository.updateStatusById(id, status);
+    }
+
+    @Override
+    public void updateArchivedById(Integer id, Boolean archived) {
+        iTaskCrudRepository.updateArchivedById(id, archived);
     }
 
     @Override

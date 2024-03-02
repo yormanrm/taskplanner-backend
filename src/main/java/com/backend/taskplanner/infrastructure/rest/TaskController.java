@@ -113,6 +113,17 @@ public class TaskController {
         }
     }
 
+    @PostMapping("/updateArchived")
+    public ResponseEntity updateArchivedById(@RequestParam Integer id, @RequestParam Boolean archived) {
+        try {
+            taskService.updateArchivedById(id, archived);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Error {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("/delete")
     public ResponseEntity<HttpStatus> deleteById(@RequestParam Integer id) {
         try {

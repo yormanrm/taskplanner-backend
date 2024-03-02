@@ -20,6 +20,7 @@ public class TaskEntity {
     private Integer id;
     private String name;
     private String description;
+    private Boolean archived;
     @Enumerated(value = EnumType.STRING)
     private Status status;
     @CreationTimestamp

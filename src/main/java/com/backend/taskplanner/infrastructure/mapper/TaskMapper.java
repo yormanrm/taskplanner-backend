@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
 
-    @Mappings({@Mapping(source = "id", target = "id"), @Mapping(source = "name", target = "name"), @Mapping(source = "description", target = "description"), @Mapping(source = "status", target = "status"), @Mapping(source = "dateCreated", target = "dateCreated"), @Mapping(source = "dateUpdated", target = "dateUpdated"), @Mapping(source = "userEntity.id", target = "userId")})
+    @Mappings({@Mapping(source = "id", target = "id"), @Mapping(source = "name", target = "name"), @Mapping(source = "description", target = "description"), @Mapping(source = "status", target = "status"), @Mapping(source = "archived", target = "archived"), @Mapping(source = "dateCreated", target = "dateCreated"), @Mapping(source = "dateUpdated", target = "dateUpdated"), @Mapping(source = "userEntity.id", target = "userId")})
     Task toTask(TaskEntity taskEntity);
 
     @AfterMapping
