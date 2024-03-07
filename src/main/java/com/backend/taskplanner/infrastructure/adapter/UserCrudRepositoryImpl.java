@@ -2,8 +2,11 @@ package com.backend.taskplanner.infrastructure.adapter;
 
 import com.backend.taskplanner.domain.model.User;
 import com.backend.taskplanner.domain.ports.IUserRepository;
+import com.backend.taskplanner.infrastructure.entity.UserEntity;
 import com.backend.taskplanner.infrastructure.mapper.UserMapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public class UserCrudRepositoryImpl implements IUserRepository {
@@ -17,7 +20,12 @@ public class UserCrudRepositoryImpl implements IUserRepository {
 
     @Override
     public User save(User user) {
-        return userMapper.toUser(iUserCrudRepository.save(userMapper.toUserEntity(user)));
+        Optional<UserEntity> existingUserEntityOptional = iUserCrudRepository.findByEmail(user.getEmail());
+        if(existingUserEntityOptional.isPresent()){
+            return new User();
+        } else {
+            return userMapper.toUser(iUserCrudRepository.save(userMapper.toUserEntity(user)));
+        }
     }
 
     @Override
