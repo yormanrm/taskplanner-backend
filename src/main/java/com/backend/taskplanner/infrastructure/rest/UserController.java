@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -38,13 +39,15 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<JWTClient> login(@RequestBody UserDTO userDTO) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userDTO.email(), userDTO.password())
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = userService.findByEmail(userDTO.email());
-        String token = jwtGenerator.getToken(userDTO.email(), user.getId());
-        JWTClient jwtClient = new JWTClient(token);
-        return new ResponseEntity<>(jwtClient, HttpStatus.OK);
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDTO.email(), userDTO.password()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            User user = userService.findByEmail(userDTO.email());
+            String token = jwtGenerator.getToken(userDTO.email(), user.getId());
+            JWTClient jwtClient = new JWTClient(token);
+            return new ResponseEntity<>(jwtClient, HttpStatus.OK);
+        } catch (AuthenticationException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
