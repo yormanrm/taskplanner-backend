@@ -58,7 +58,8 @@ public class UserController {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 User user = userService.findByEmail(userDTO.email());
                 String token = jwtGenerator.getToken(userDTO.email(), user.getId());
-                JWTClient jwtClient = new JWTClient(token);
+                String name = user.getFirstname() + " " +user.getLastname();
+                JWTClient jwtClient = new JWTClient(token, name, user.getEmail());
                 return new ResponseEntity<>(jwtClient, HttpStatus.OK);
             } catch (AuthenticationException e) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
