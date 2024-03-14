@@ -12,6 +12,8 @@ public interface ITaskRepository {
 
     Iterable<Task> findByStatus(Integer userId, Status status);
 
+    Iterable<Task> findArchived(Integer userId);
+
     Iterable<Task> findByNameOrDescription(Integer userId, String text);
 
     Iterable<Task> findByDatesRange(Integer userId, String startDate, String endDate);

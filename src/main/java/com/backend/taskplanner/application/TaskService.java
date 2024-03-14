@@ -27,6 +27,10 @@ public class TaskService {
         return this.iTaskRepository.findByStatus(userId, status);
     }
 
+    public Iterable<Task> findArchived(Integer userId) {
+        return this.iTaskRepository.findArchived(userId);
+    }
+
     public Iterable<Task> findByNameOrDescription(Integer userId, String text) {
         return this.iTaskRepository.findByNameOrDescription(userId, text);
     }

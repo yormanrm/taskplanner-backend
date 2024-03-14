@@ -77,6 +77,20 @@ public class TaskController {
         }
     }
 
+    @GetMapping("/get/archive")
+    public ResponseEntity<Iterable<Task>> findArchived(HttpServletRequest request) {
+        try {
+            Claims claims = JWTValid(request);
+            Integer userId = Integer.parseInt(claims.get("id").toString());
+            Iterable<Task> archive = taskService.findArchived(userId);
+            log.info("archive :{}", archive);
+            return new ResponseEntity<>(archive, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/get/bySearch")
     public ResponseEntity<Iterable<Task>> findByNameOrDescription(@RequestParam String search, HttpServletRequest request) {
         try {

@@ -16,6 +16,9 @@ public interface ITaskCrudRepository extends CrudRepository<TaskEntity, Integer>
 
     Iterable<TaskEntity> findByUserEntityAndStatus(UserEntity userEntity, Status status);
 
+    @Query("SELECT t FROM TaskEntity t WHERE t.archived = true AND t.userEntity = :userEntity")
+    Iterable<TaskEntity> findArchived(UserEntity userEntity);
+
     @Query("SELECT t FROM TaskEntity t WHERE t.dateCreated BETWEEN :startDate AND :endDate AND t.userEntity = :userEntity")
     Iterable<TaskEntity> findByDatesRange(UserEntity userEntity, LocalDateTime startDate, LocalDateTime endDate);
 

@@ -81,6 +81,13 @@ public class TaskCrudRepositoryImpl implements ITaskRepository {
     }
 
     @Override
+    public Iterable<Task> findArchived(Integer userId) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(userId);
+        return taskMapper.toTasks(iTaskCrudRepository.findArchived(userEntity));
+    }
+
+    @Override
     public Iterable<Task> findByNameOrDescription(Integer userId, String text) {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(userId);
