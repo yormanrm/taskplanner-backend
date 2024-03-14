@@ -8,15 +8,13 @@ public interface ITaskRepository {
 
     Task findById(Integer id);
 
-    Iterable<Task> findByUserId(Integer userId);
+    Iterable<Task> findByUserId(Integer userId, Boolean archived);
 
-    Iterable<Task> findByStatus(Integer userId, Status status);
+    Iterable<Task> findByStatus(Integer userId, Status status, Boolean archived);
 
-    Iterable<Task> findArchived(Integer userId);
+    Iterable<Task> findByNameOrDescription(Integer userId, String text, Boolean archived);
 
-    Iterable<Task> findByNameOrDescription(Integer userId, String text);
-
-    Iterable<Task> findByDatesRange(Integer userId, String startDate, String endDate);
+    Iterable<Task> findByDatesRange(Integer userId, String startDate, String endDate, Boolean archived);
 
     void updateStatusById(Integer id, Status status);
 

@@ -67,54 +67,33 @@ public class TaskCrudRepositoryImpl implements ITaskRepository {
     }
 
     @Override
-    public Iterable<Task> findByUserId(Integer userId) {
+    public Iterable<Task> findByUserId(Integer userId, Boolean archived) {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(userId);
-        return taskMapper.toTasks(iTaskCrudRepository.findByUserEntity(userEntity));
+        return taskMapper.toTasks(iTaskCrudRepository.findByUserEntity(userEntity, archived));
     }
 
     @Override
-    public Iterable<Task> findByStatus(Integer userId, Status status) {
+    public Iterable<Task> findByStatus(Integer userId, Status status, Boolean archived) {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(userId);
-        return taskMapper.toTasks(iTaskCrudRepository.findByUserEntityAndStatus(userEntity, status));
+        return taskMapper.toTasks(iTaskCrudRepository.findByUserEntityAndStatus(userEntity, status, archived));
     }
 
     @Override
-    public Iterable<Task> findArchived(Integer userId) {
+    public Iterable<Task> findByNameOrDescription(Integer userId, String text, Boolean archived) {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(userId);
-        return taskMapper.toTasks(iTaskCrudRepository.findArchived(userEntity));
+        return taskMapper.toTasks(iTaskCrudRepository.findByNameOrDescription(userEntity, text, archived));
     }
 
     @Override
-    public Iterable<Task> findByNameOrDescription(Integer userId, String text) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(userId);
-        Iterable<TaskEntity> allTasks = iTaskCrudRepository.findByUserEntity(userEntity);
-        if (text == null || text.isEmpty()) {
-            return taskMapper.toTasks(allTasks);
-        } else {
-            String searchtext = text.toLowerCase();
-            List<TaskEntity> matchingTasks = new ArrayList<>();
-            for (TaskEntity taskEntity : allTasks) {
-                String lowerCaseName = taskEntity.getName().toLowerCase();
-                String lowerCaseDescription = taskEntity.getDescription().toLowerCase();
-                if (lowerCaseName.contains(searchtext) || lowerCaseDescription.contains(searchtext)) {
-                    matchingTasks.add(taskEntity);
-                }
-            }
-            return taskMapper.toTasks(matchingTasks);
-        }
-    }
-
-    @Override
-    public Iterable<Task> findByDatesRange(Integer userId, String startDate, String endDate) {
+    public Iterable<Task> findByDatesRange(Integer userId, String startDate, String endDate, Boolean archived) {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(userId);
         LocalDateTime startDateTime = LocalDateTime.parse(startDate + "T00:00:00");
         LocalDateTime endDateTime = LocalDateTime.parse(endDate + "T23:59:59");
-        Iterable<TaskEntity> taskEntities = iTaskCrudRepository.findByDatesRange(userEntity, startDateTime, endDateTime);
+        Iterable<TaskEntity> taskEntities = iTaskCrudRepository.findByDatesRange(userEntity, startDateTime, endDateTime, archived);
         return taskMapper.toTasks(taskEntities);
     }
 

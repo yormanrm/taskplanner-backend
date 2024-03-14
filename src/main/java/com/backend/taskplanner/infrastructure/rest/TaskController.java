@@ -38,11 +38,11 @@ public class TaskController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity<Iterable<Task>> findByUserId(HttpServletRequest request) {
+    public ResponseEntity<Iterable<Task>> findByUserId(@RequestParam Boolean archived, HttpServletRequest request) {
         try {
             Claims claims = JWTValid(request);
             Integer userId = Integer.parseInt(claims.get("id").toString());
-            return new ResponseEntity<>(taskService.findByUserId(userId), HttpStatus.OK);
+            return new ResponseEntity<>(taskService.findByUserId(userId, archived), HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -65,26 +65,12 @@ public class TaskController {
     }
 
     @GetMapping("/get/byStatus")
-    public ResponseEntity<Iterable<Task>> findByStatus(@RequestParam String status, HttpServletRequest request) {
+    public ResponseEntity<Iterable<Task>> findByStatus(@RequestParam String status, @RequestParam Boolean archived, HttpServletRequest request) {
         try {
             Status statusValue = Status.valueOf(status);
             Claims claims = JWTValid(request);
             Integer userId = Integer.parseInt(claims.get("id").toString());
-            return new ResponseEntity<>(taskService.findByStatus(userId, statusValue), HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("Error {}", e.getMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/get/archive")
-    public ResponseEntity<Iterable<Task>> findArchived(HttpServletRequest request) {
-        try {
-            Claims claims = JWTValid(request);
-            Integer userId = Integer.parseInt(claims.get("id").toString());
-            Iterable<Task> archive = taskService.findArchived(userId);
-            log.info("archive :{}", archive);
-            return new ResponseEntity<>(archive, HttpStatus.OK);
+            return new ResponseEntity<>(taskService.findByStatus(userId, statusValue, archived), HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -92,11 +78,11 @@ public class TaskController {
     }
 
     @GetMapping("/get/bySearch")
-    public ResponseEntity<Iterable<Task>> findByNameOrDescription(@RequestParam String search, HttpServletRequest request) {
+    public ResponseEntity<Iterable<Task>> findByNameOrDescription(@RequestParam String search, @RequestParam Boolean archived, HttpServletRequest request) {
         try {
             Claims claims = JWTValid(request);
             Integer userId = Integer.parseInt(claims.get("id").toString());
-            return new ResponseEntity<>(taskService.findByNameOrDescription(userId, search), HttpStatus.OK);
+            return new ResponseEntity<>(taskService.findByNameOrDescription(userId, search, archived), HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -104,11 +90,11 @@ public class TaskController {
     }
 
     @GetMapping("/get/byDatesRange")
-    public ResponseEntity<Iterable<Task>> findByDatesRange(HttpServletRequest request, @RequestParam String startDate, @RequestParam String endDate) {
+    public ResponseEntity<Iterable<Task>> findByDatesRange(HttpServletRequest request, @RequestParam String startDate, @RequestParam String endDate, @RequestParam Boolean archived) {
         try {
             Claims claims = JWTValid(request);
             Integer userId = Integer.parseInt(claims.get("id").toString());
-            return new ResponseEntity<>(taskService.findByDatesRange(userId, startDate, endDate), HttpStatus.OK);
+            return new ResponseEntity<>(taskService.findByDatesRange(userId, startDate, endDate, archived), HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

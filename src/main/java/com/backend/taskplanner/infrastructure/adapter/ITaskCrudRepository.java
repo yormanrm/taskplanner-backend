@@ -6,21 +6,24 @@ import com.backend.taskplanner.infrastructure.entity.UserEntity;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 
 public interface ITaskCrudRepository extends CrudRepository<TaskEntity, Integer> {
-    Iterable<TaskEntity> findByUserEntity(UserEntity userEntity);
+    @Query("SELECT t FROM TaskEntity t WHERE t.userEntity = :userEntity AND t.archived = :archived")
+    Iterable<TaskEntity> findByUserEntity(@Param("userEntity") UserEntity userEntity, @Param("archived") Boolean archived);
 
-    Iterable<TaskEntity> findByUserEntityAndStatus(UserEntity userEntity, Status status);
+    @Query("SELECT t FROM TaskEntity t WHERE t.userEntity = :userEntity AND t.archived = :archived AND t.status = :status")
+    Iterable<TaskEntity> findByUserEntityAndStatus(@Param("userEntity") UserEntity userEntity, @Param("status") Status status, @Param("archived") Boolean archived);
 
-    @Query("SELECT t FROM TaskEntity t WHERE t.archived = true AND t.userEntity = :userEntity")
-    Iterable<TaskEntity> findArchived(UserEntity userEntity);
+    @Query("SELECT t FROM TaskEntity t WHERE t.userEntity = :userEntity AND t.archived = :archived AND (t.name LIKE %:text% OR t.description LIKE %:text%)")
+    Iterable<TaskEntity> findByNameOrDescription(@Param("userEntity") UserEntity userEntity, @Param("text") String text, @Param("archived") Boolean archived);
 
-    @Query("SELECT t FROM TaskEntity t WHERE t.dateCreated BETWEEN :startDate AND :endDate AND t.userEntity = :userEntity")
-    Iterable<TaskEntity> findByDatesRange(UserEntity userEntity, LocalDateTime startDate, LocalDateTime endDate);
+    @Query("SELECT t FROM TaskEntity t WHERE t.dateCreated BETWEEN :startDate AND :endDate AND t.userEntity = :userEntity AND t.archived = :archived")
+    Iterable<TaskEntity> findByDatesRange(UserEntity userEntity, LocalDateTime startDate, LocalDateTime endDate, Boolean archived);
 
     @Transactional
     @Modifying
