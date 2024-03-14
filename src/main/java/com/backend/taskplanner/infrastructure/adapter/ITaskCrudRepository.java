@@ -19,7 +19,7 @@ public interface ITaskCrudRepository extends CrudRepository<TaskEntity, Integer>
     @Query("SELECT t FROM TaskEntity t WHERE t.userEntity = :userEntity AND t.archived = :archived AND t.status = :status")
     Iterable<TaskEntity> findByUserEntityAndStatus(@Param("userEntity") UserEntity userEntity, @Param("status") Status status, @Param("archived") Boolean archived);
 
-    @Query("SELECT t FROM TaskEntity t WHERE t.userEntity = :userEntity AND t.archived = :archived AND (t.name LIKE %:text% OR t.description LIKE %:text%)")
+    @Query("SELECT t FROM TaskEntity t WHERE t.userEntity = :userEntity AND t.archived = :archived AND (LOWER(t.name) LIKE LOWER(CONCAT('%', :text, '%')) OR LOWER(t.description) LIKE LOWER(CONCAT('%', :text, '%')))")
     Iterable<TaskEntity> findByNameOrDescription(@Param("userEntity") UserEntity userEntity, @Param("text") String text, @Param("archived") Boolean archived);
 
     @Query("SELECT t FROM TaskEntity t WHERE t.dateCreated BETWEEN :startDate AND :endDate AND t.userEntity = :userEntity AND t.archived = :archived")
